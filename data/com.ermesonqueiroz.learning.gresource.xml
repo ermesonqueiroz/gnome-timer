@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<gresources>
+    <gresource prefix="/com/ermesonqueiroz/learning/icons/16x16/actions/">
+    <file alias="timer-sand-symbolic.svg">gtk/icons/timer-sand-symbolic.svg</file>
+  </gresource>
+</gresources>

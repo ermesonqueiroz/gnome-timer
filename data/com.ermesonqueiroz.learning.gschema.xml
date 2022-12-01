@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="learning">
+	<schema id="com.ermesonqueiroz.learning" path="/com/ermesonqueiroz/learning/">
+	</schema>
+</schemalist>

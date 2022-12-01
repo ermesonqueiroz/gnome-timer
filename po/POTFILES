@@ -1,0 +1,6 @@
+data/com.ermesonqueiroz.learning.desktop.in
+data/com.ermesonqueiroz.learning.appdata.xml.in
+data/com.ermesonqueiroz.learning.gschema.xml
+src/main.c
+src/learning-window.c
+src/learning-window.ui
