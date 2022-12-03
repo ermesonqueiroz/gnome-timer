@@ -6,3 +6,12 @@
   font-size: 48pt;
 }
 
+.timer-face-label {
+  font-size: 40pt;
+  font-weight: 300;
+}
+
+.large-button {
+  padding: 6px;
+}
+

@@ -27,11 +27,17 @@ struct _LearningWindow
   AdwApplicationWindow  parent_instance;
 
   /* Template widgets */
-  GtkHeaderBar        *header_bar;
-  GtkLabel            *label;
+  AdwViewStack        *stack;
 };
 
 G_DEFINE_FINAL_TYPE (LearningWindow, learning_window, ADW_TYPE_APPLICATION_WINDOW)
+
+static void
+update_duration (GtkButton       *button,
+                 LearningWindow  *self)
+{
+  adw_view_stack_set_visible_child_name (self->stack, "face");
+}
 
 static void
 learning_window_class_init (LearningWindowClass *klass)
@@ -39,8 +45,9 @@ learning_window_class_init (LearningWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/com/ermesonqueiroz/learning/learning-window.ui");
-  gtk_widget_class_bind_template_child (widget_class, LearningWindow, header_bar);
-  gtk_widget_class_bind_template_child (widget_class, LearningWindow, label);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, stack);
+
+  gtk_widget_class_bind_template_callback (widget_class, update_duration);
 }
 
 static void
