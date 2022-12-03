@@ -31,22 +31,70 @@ struct _LearningWindow
   GtkAdjustment       *adjustment_hours;
   GtkAdjustment       *adjustment_minutes;
   GtkAdjustment       *adjustment_seconds;
-  GtkLabel            *timer_face_label;
+  GtkLabel            *countdown_hours_label;
+  GtkLabel            *countdown_minutes_label;
+  GtkLabel            *countdown_seconds_label;
 };
 
 G_DEFINE_FINAL_TYPE (LearningWindow, learning_window, ADW_TYPE_APPLICATION_WINDOW)
 
 static void
+update_timer_countdown (LearningWindow *self,
+                        int hours,
+                        int minutes,
+                        int seconds)
+{
+  gtk_label_set_text (self->countdown_hours_label,   g_strdup_printf("%02d", hours));
+  gtk_label_set_text (self->countdown_minutes_label, g_strdup_printf("%02d", minutes));
+  gtk_label_set_text (self->countdown_seconds_label, g_strdup_printf("%02d", seconds));
+}
+
+static void
+timer_notify (LearningWindow  *self)
+{
+  GNotification *notification = g_notification_new ("Time is up!");
+  g_notification_set_body (notification, "Timer countdown finished");
+  g_application_send_notification (g_application_get_default (),
+                                   NULL,
+                                   notification);
+}
+
+static gboolean
+timer_callback (LearningWindow  *self)
+{
+  gint64 hours   = g_ascii_strtoll (gtk_label_get_text (self->countdown_hours_label),   NULL, 10);
+  gint64 minutes = g_ascii_strtoll (gtk_label_get_text (self->countdown_minutes_label), NULL, 10);
+  gint64 seconds = g_ascii_strtoll (gtk_label_get_text (self->countdown_seconds_label), NULL, 10);
+
+  int total_in_seconds = (((hours * 60 + minutes) * 60) + seconds) - 1;
+
+  if (total_in_seconds < 0) return G_SOURCE_REMOVE;
+
+  update_timer_countdown (self,
+                          (int) ((gint64) total_in_seconds / 60) / 60,
+                          (int) ((gint64) total_in_seconds / 60) % 60,
+                          (int) total_in_seconds % 60);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
 start_timer (GtkButton       *button,
-            LearningWindow  *self)
+             LearningWindow  *self)
 {
   adw_view_stack_set_visible_child_name (self->stack, "face");
 
-  int hours   = (int) gtk_adjustment_get_value (self->adjustment_hours);
-  int minutes = (int) gtk_adjustment_get_value (self->adjustment_minutes);
-  int seconds = (int) gtk_adjustment_get_value (self->adjustment_seconds);
+  int hours   = gtk_adjustment_get_value (self->adjustment_hours);
+  int minutes = gtk_adjustment_get_value (self->adjustment_minutes);
+  int seconds = gtk_adjustment_get_value (self->adjustment_seconds);
 
-  gtk_label_set_text (self->timer_face_label, g_strdup_printf("%02d : %02d : %02d", hours, minutes, seconds));
+  update_timer_countdown (self, hours, minutes, seconds);
+
+  g_timeout_add_seconds_full (G_PRIORITY_HIGH,
+                              1,
+                              G_SOURCE_FUNC (timer_callback),
+                              self,
+                              (GDestroyNotify) timer_notify);
 }
 
 static void
@@ -59,7 +107,9 @@ learning_window_class_init (LearningWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, adjustment_hours);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, adjustment_minutes);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, adjustment_seconds);
-  gtk_widget_class_bind_template_child (widget_class, LearningWindow, timer_face_label);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_hours_label);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_minutes_label);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_seconds_label);
 
   gtk_widget_class_bind_template_callback (widget_class, start_timer);
 }
