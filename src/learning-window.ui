@@ -292,7 +292,7 @@
                     <child>
                       <object class="GtkButton">
                         <property name="icon-name">media-playback-start-symbolic</property>
-                        <signal name="clicked" handler="update_duration" swapped="no"/>
+                        <signal name="clicked" handler="start_timer" swapped="no"/>
 
                         <style>
                           <class name="suggested-action" />
