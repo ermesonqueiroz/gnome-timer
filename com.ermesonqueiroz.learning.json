@@ -3,6 +3,7 @@
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "43",
     "sdk" : "org.gnome.Sdk",
+    "desktop-file-name-prefix": " (Nightly)",
     "command" : "learning",
     "finish-args" : [
         "--share=network",

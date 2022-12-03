@@ -28,15 +28,25 @@ struct _LearningWindow
 
   /* Template widgets */
   AdwViewStack        *stack;
+  GtkAdjustment       *adjustment_hours;
+  GtkAdjustment       *adjustment_minutes;
+  GtkAdjustment       *adjustment_seconds;
+  GtkLabel            *timer_face_label;
 };
 
 G_DEFINE_FINAL_TYPE (LearningWindow, learning_window, ADW_TYPE_APPLICATION_WINDOW)
 
 static void
 start_timer (GtkButton       *button,
-                 LearningWindow  *self)
+            LearningWindow  *self)
 {
   adw_view_stack_set_visible_child_name (self->stack, "face");
+
+  int hours   = (int) gtk_adjustment_get_value (self->adjustment_hours);
+  int minutes = (int) gtk_adjustment_get_value (self->adjustment_minutes);
+  int seconds = (int) gtk_adjustment_get_value (self->adjustment_seconds);
+
+  gtk_label_set_text (self->timer_face_label, g_strdup_printf("%02d : %02d : %02d", hours, minutes, seconds));
 }
 
 static void
@@ -46,6 +56,10 @@ learning_window_class_init (LearningWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/com/ermesonqueiroz/learning/learning-window.ui");
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, stack);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, adjustment_hours);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, adjustment_minutes);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, adjustment_seconds);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, timer_face_label);
 
   gtk_widget_class_bind_template_callback (widget_class, start_timer);
 }
