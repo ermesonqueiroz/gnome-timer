@@ -80,7 +80,7 @@ learning_application_about_action (GSimpleAction *action,
   window = gtk_application_get_active_window (GTK_APPLICATION (self));
 
   adw_show_about_window (window,
-                         "application-name", "learning",
+                         "application-name", "Timer",
                          "application-icon", "com.ermesonqueiroz.learning",
                          "developer-name", "Ermeson Sampaio",
                          "version", "0.1.0",

@@ -24,33 +24,12 @@
   <template class="LearningWindow" parent="AdwApplicationWindow">
     <property name="default-width">900</property>
     <property name="default-height">600</property>
+    <property name="title">Timer</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkHeaderBar" id="header_bar">
-            <property name="title-widget">
-              <object class="AdwViewSwitcher">
-                <property name="policy">1</property>
-                <property name="stack">
-                  <object class="AdwViewStack" id="header-view-stack">
-                    <child>
-                      <object class="AdwViewStackPage">
-                        <property name="name">timer</property>
-                        <property name="title" translatable="true">Timer</property>
-                        <property name="icon-name">timer-sand-symbolic</property>
-                        <property name="child">
-                          <object class="AdwStatusPage">
-                            <property name="title">Welcome!</property>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                  </object>
-                </property>
-              </object>
-            </property>
-
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="icon-name">open-menu-symbolic</property>
