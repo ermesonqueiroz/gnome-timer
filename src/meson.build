@@ -8,6 +8,7 @@ learning_sources = [
 learning_deps = [
   dependency('gtk4'),
   dependency('libadwaita-1'),
+  dependency('gsound'),
 ]
 
 learning_sources += gnome.compile_resources('learning-resources',

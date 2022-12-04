@@ -8,6 +8,8 @@ i18n = import('i18n')
 gnome = import('gnome')
 cc = meson.get_compiler('c')
 
+gsound = dependency('gsound', version: '>=0.98')
+
 config_h = configuration_data()
 config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
 config_h.set_quoted('GETTEXT_PACKAGE', 'learning')

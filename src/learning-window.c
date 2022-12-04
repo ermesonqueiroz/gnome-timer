@@ -19,8 +19,8 @@
  */
 
 #include "config.h"
-
 #include "learning-window.h"
+#include <gsound.h>
 
 struct _LearningWindow
 {
@@ -76,6 +76,16 @@ set_adjustments_values (LearningWindow *self,
 static void
 timer_notify (LearningWindow  *self)
 {
+  GSoundContext *sound_ctx = gsound_context_new (NULL, NULL);
+  GSettings *settings = g_settings_new ("org.gnome.desktop.sound");
+  gchar *soundtheme = g_settings_get_string (settings, "theme-name");
+
+  gsound_context_play_simple (sound_ctx, NULL, NULL,
+                              GSOUND_ATTR_EVENT_ID, "complete",
+                              GSOUND_ATTR_CANBERRA_XDG_THEME_NAME, soundtheme,
+                              GSOUND_ATTR_MEDIA_ROLE, "alarm",
+                              NULL);
+
   GNotification *notification = g_notification_new ("Time is up!");
   g_notification_set_body (notification, "Timer countdown finished");
   g_application_send_notification (g_application_get_default (),
@@ -107,7 +117,7 @@ timer_callback (LearningWindow  *self)
 
   int total_in_seconds = (((hours * 60 + minutes) * 60) + seconds) - 1;
 
-  if (total_in_seconds < 0) return G_SOURCE_REMOVE;
+  if (total_in_seconds <= 0) return G_SOURCE_REMOVE;
 
   update_timer_countdown (self,
                           (int) ((gint64) total_in_seconds / 60) / 60,
