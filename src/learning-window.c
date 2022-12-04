@@ -36,6 +36,9 @@ struct _LearningWindow
   GtkLabel            *countdown_seconds_label;
   AdwViewStack        *timer_face_controls_stack;
   GtkActionable       *actions_box;
+  GtkSpinButton       *h_spinbutton;
+  GtkSpinButton       *m_spinbutton;
+  GtkSpinButton       *s_spinbutton;
 };
 
 G_DEFINE_FINAL_TYPE (LearningWindow, learning_window, ADW_TYPE_APPLICATION_WINDOW)
@@ -182,6 +185,19 @@ set_duration (GSimpleAction   *self,
   set_adjustments_values (window, hours, minutes, 0);
 }
 
+static gboolean
+format_spin_buttons (GtkSpinButton  *button,
+                     LearningWindow *self)
+{
+  GtkAdjustment *adjustment = gtk_spin_button_get_adjustment (button);
+  int value = gtk_adjustment_get_value (adjustment);
+  char *text = g_strdup_printf ("%02d", value);
+  gtk_editable_set_text (GTK_EDITABLE (button), text);
+  g_free (text);
+
+  return TRUE;
+}
+
 static void
 learning_window_class_init (LearningWindowClass *klass)
 {
@@ -197,12 +213,16 @@ learning_window_class_init (LearningWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_seconds_label);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, timer_face_controls_stack);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, actions_box);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, h_spinbutton);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, m_spinbutton);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, s_spinbutton);
 
   gtk_widget_class_bind_template_callback (widget_class, start_timer);
   gtk_widget_class_bind_template_callback (widget_class, resume_timer);
   gtk_widget_class_bind_template_callback (widget_class, destroy_timer);
   gtk_widget_class_bind_template_callback (widget_class, pause_timer);
   gtk_widget_class_bind_template_callback (widget_class, reset_timer);
+  gtk_widget_class_bind_template_callback (widget_class, format_spin_buttons);
 }
 
 static void

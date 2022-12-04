@@ -195,6 +195,7 @@
                             <property name="editable">True</property>
                             <property name="wrap">True</property>
                             <property name="adjustment">adjustment_hours</property>
+                            <signal name="output" handler="format_spin_buttons" swapped="no" />
 
                             <style>
                               <class name="timer-spinbutton" />
@@ -225,11 +226,11 @@
                         <child>
                           <object class="GtkSpinButton" id="m_spinbutton">
                             <property name="orientation">vertical</property>
-                            <property name="width_chars">2</property>
                             <property name="numeric">True</property>
                             <property name="editable">True</property>
                             <property name="wrap">True</property>
                             <property name="adjustment">adjustment_minutes</property>
+                            <signal name="output" handler="format_spin_buttons" swapped="no" />
 
                             <style>
                               <class name="timer-spinbutton" />
@@ -265,6 +266,7 @@
                             <property name="editable">True</property>
                             <property name="wrap">True</property>
                             <property name="adjustment">adjustment_seconds</property>
+                            <signal name="output" handler="format_spin_buttons" swapped="no" />
 
                             <style>
                               <class name="timer-spinbutton" />
