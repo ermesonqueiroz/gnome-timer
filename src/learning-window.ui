@@ -89,13 +89,15 @@
                     </child>
 
                     <child>
-                      <object class="GtkGrid">
+                      <object class="GtkGrid" id="actions_box">
                         <property name="column-spacing">26</property>
                         <property name="row-spacing">15</property>
 
                         <child>
                           <object class="GtkButton">
                             <property name="label">1m</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">1</property>
 
                             <layout>
                               <property name="column">0</property>
@@ -107,6 +109,8 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label">2m</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">2</property>
 
                             <layout>
                               <property name="column">1</property>
@@ -118,6 +122,8 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label">3m</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">3</property>
 
                             <layout>
                               <property name="column">2</property>
@@ -129,6 +135,8 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label">5m</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">5</property>
 
                             <layout>
                               <property name="column">3</property>
@@ -140,6 +148,8 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label">15m</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">15</property>
 
                             <layout>
                               <property name="column">0</property>
@@ -151,6 +161,8 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label">30m</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">30</property>
 
                             <layout>
                               <property name="column">1</property>
@@ -162,6 +174,8 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label">45m</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">45</property>
 
                             <layout>
                               <property name="column">2</property>
@@ -173,6 +187,8 @@
                         <child>
                           <object class="GtkButton">
                             <property name="label">1h</property>
+                            <property name="action_name">timer-setup.set-duration</property>
+                            <property name="action_target">60</property>
 
                             <layout>
                               <property name="column">3</property>

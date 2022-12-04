@@ -35,6 +35,7 @@ struct _LearningWindow
   GtkLabel            *countdown_minutes_label;
   GtkLabel            *countdown_seconds_label;
   AdwViewStack        *timer_face_controls_stack;
+  GtkActionable       *actions_box;
 };
 
 G_DEFINE_FINAL_TYPE (LearningWindow, learning_window, ADW_TYPE_APPLICATION_WINDOW)
@@ -56,6 +57,17 @@ reset_adjustments_values (LearningWindow *self)
   gtk_adjustment_set_value (self->adjustment_hours, 0);
   gtk_adjustment_set_value (self->adjustment_minutes, 0);
   gtk_adjustment_set_value (self->adjustment_seconds, 0);
+}
+
+static void
+set_adjustments_values (LearningWindow *self,
+                        int hours,
+                        int minutes,
+                        int seconds)
+{
+  gtk_adjustment_set_value (self->adjustment_hours,   hours);
+  gtk_adjustment_set_value (self->adjustment_minutes, minutes);
+  gtk_adjustment_set_value (self->adjustment_seconds, seconds);
 }
 
 static void
@@ -159,6 +171,18 @@ start_timer (GtkButton       *button,
 }
 
 static void
+set_duration (GSimpleAction   *self,
+              GVariant        *parameter,
+              LearningWindow  *window)
+{
+  int total_minutes = g_variant_get_int32 (parameter);
+  int hours = total_minutes / 60;
+  int minutes = total_minutes % 60;
+
+  set_adjustments_values (window, hours, minutes, 0);
+}
+
+static void
 learning_window_class_init (LearningWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -172,6 +196,7 @@ learning_window_class_init (LearningWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_minutes_label);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_seconds_label);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, timer_face_controls_stack);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, actions_box);
 
   gtk_widget_class_bind_template_callback (widget_class, start_timer);
   gtk_widget_class_bind_template_callback (widget_class, resume_timer);
@@ -184,4 +209,16 @@ static void
 learning_window_init (LearningWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  GSimpleActionGroup *actions = g_simple_action_group_new ();
+  GVariantType *duration_type = g_variant_type_new("i");
+  GSimpleAction *set_duration_action = g_simple_action_new("set-duration", duration_type);
+
+  g_signal_connect (set_duration_action,
+                    "activate",
+                    G_CALLBACK (set_duration),
+                    self);
+
+  g_action_map_add_action (G_ACTION_MAP (actions), G_ACTION (set_duration_action));
+  gtk_widget_insert_action_group (GTK_WIDGET (self->actions_box), "timer-setup", G_ACTION_GROUP (actions));
 }
