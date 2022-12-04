@@ -391,59 +391,167 @@
                             </child>
 
                             <child>
-                              <object class="GtkGrid">
-                                <property name="valign">center</property>
-                                <property name="halign">center</property>
-                                <property name="column-spacing">30</property>
-
+                              <object class="AdwViewStack" id="timer_face_controls_stack">
                                 <child>
-                                  <object class="GtkButton">
-                                    <property name="icon-name">refresh-symbolic</property>
-                                    <property name="halign">center</property>
-                                    <property name="valign">center</property>
+                                  <object class="AdwViewStackPage">
+                                    <property name="name">running</property>
+                                    <property name="child">
+                                      <object class="GtkButton">
+                                        <property name="icon-name">media-playback-pause-symbolic</property>
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <signal name="clicked" handler="pause_timer" swapped="no" />
 
-                                    <style>
-                                      <class name="circular" />
-                                    </style>
-
-                                    <layout>
-                                      <property name="column">0</property>
-                                      <property name="row">0</property>
-                                    </layout>
+                                        <style>
+                                          <class name="circular" />
+                                          <class name="large-button" />
+                                        </style>
+                                      </object>
+                                    </property>
                                   </object>
                                 </child>
 
                                 <child>
-                                  <object class="GtkButton">
-                                    <property name="icon-name">media-playback-start-symbolic</property>
+                                  <object class="AdwViewStackPage">
+                                    <property name="name">paused</property>
+                                    <property name="child">
+                                      <object class="GtkGrid">
+                                        <property name="valign">center</property>
+                                        <property name="halign">center</property>
+                                        <property name="column-spacing">30</property>
 
-                                    <style>
-                                      <class name="suggested-action" />
-                                      <class name="circular" />
-                                      <class name="large-button" />
-                                    </style>
+                                        <child>
+                                          <object class="GtkButton">
+                                            <property name="icon-name">refresh-symbolic</property>
+                                            <property name="halign">center</property>
+                                            <property name="valign">center</property>
+                                            <signal name="clicked" handler="reset_timer" swapped="no" />
 
-                                    <layout>
-                                      <property name="column">1</property>
-                                      <property name="row">0</property>
-                                    </layout>
+                                            <style>
+                                              <class name="circular" />
+                                            </style>
+
+                                            <layout>
+                                              <property name="column">0</property>
+                                              <property name="row">0</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+
+                                        <child>
+                                          <object class="GtkButton">
+                                            <property name="icon-name">media-playback-start-symbolic</property>
+                                            <signal name="clicked" handler="resume_timer" swapped="no"/>
+
+                                            <style>
+                                              <class name="suggested-action" />
+                                              <class name="circular" />
+                                              <class name="large-button" />
+                                            </style>
+
+                                            <layout>
+                                              <property name="column">1</property>
+                                              <property name="row">0</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+
+                                        <child>
+                                          <object class="GtkButton">
+                                            <property name="icon-name">user-trash-symbolic</property>
+                                            <property name="halign">center</property>
+                                            <property name="valign">center</property>
+                                            <signal name="clicked" handler="destroy_timer" swapped="no"/>"
+
+                                            <style>
+                                              <class name="circular" />
+                                            </style>
+
+                                            <layout>
+                                              <property name="column">2</property>
+                                              <property name="row">0</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </property>
                                   </object>
                                 </child>
 
                                 <child>
-                                  <object class="GtkButton">
-                                    <property name="icon-name">user-trash-symbolic</property>
-                                    <property name="halign">center</property>
-                                    <property name="valign">center</property>
+                                  <object class="AdwViewStackPage">
+                                    <property name="name">done</property>
+                                    <property name="child">
+                                      <object class="GtkGrid">
+                                        <property name="valign">center</property>
+                                        <property name="halign">center</property>
+                                        <property name="column-spacing">30</property>
 
-                                    <style>
-                                      <class name="circular" />
-                                    </style>
+                                        <child>
+                                          <object class="GtkButton">
+                                            <property name="icon-name">refresh-symbolic</property>
+                                            <property name="halign">center</property>
+                                            <property name="valign">center</property>
+                                            <signal name="clicked" handler="reset_timer" swapped="no" />
 
-                                    <layout>
-                                      <property name="column">2</property>
-                                      <property name="row">0</property>
-                                    </layout>
+                                            <style>
+                                              <class name="circular" />
+                                            </style>
+
+                                            <layout>
+                                              <property name="column">0</property>
+                                              <property name="row">0</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+
+                                        <child>
+                                          <object class="GtkButton">
+                                            <property name="icon-name">media-playback-start-symbolic</property>
+                                            <signal name="clicked" handler="start_timer" swapped="no"/>
+
+                                            <style>
+                                              <class name="suggested-action" />
+                                              <class name="circular" />
+                                              <class name="large-button" />
+                                            </style>
+
+                                            <layout>
+                                              <property name="column">1</property>
+                                              <property name="row">0</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+
+                                        <child>
+                                          <object class="GtkButton">
+                                            <property name="icon-name">user-trash-symbolic</property>
+                                            <property name="halign">center</property>
+                                            <property name="valign">center</property>
+                                            <signal name="clicked" handler="destroy_timer" swapped="no"/>"
+
+                                            <style>
+                                              <class name="circular" />
+                                            </style>
+
+                                            <layout>
+                                              <property name="column">2</property>
+                                              <property name="row">0</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </property>
                                   </object>
                                 </child>
 

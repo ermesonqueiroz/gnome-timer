@@ -34,6 +34,7 @@ struct _LearningWindow
   GtkLabel            *countdown_hours_label;
   GtkLabel            *countdown_minutes_label;
   GtkLabel            *countdown_seconds_label;
+  AdwViewStack        *timer_face_controls_stack;
 };
 
 G_DEFINE_FINAL_TYPE (LearningWindow, learning_window, ADW_TYPE_APPLICATION_WINDOW)
@@ -50,6 +51,14 @@ update_timer_countdown (LearningWindow *self,
 }
 
 static void
+reset_adjustments_values (LearningWindow *self)
+{
+  gtk_adjustment_set_value (self->adjustment_hours, 0);
+  gtk_adjustment_set_value (self->adjustment_minutes, 0);
+  gtk_adjustment_set_value (self->adjustment_seconds, 0);
+}
+
+static void
 timer_notify (LearningWindow  *self)
 {
   GNotification *notification = g_notification_new ("Time is up!");
@@ -57,11 +66,26 @@ timer_notify (LearningWindow  *self)
   g_application_send_notification (g_application_get_default (),
                                    NULL,
                                    notification);
+
+  int hours   = gtk_adjustment_get_value (self->adjustment_hours);
+  int minutes = gtk_adjustment_get_value (self->adjustment_minutes);
+  int seconds = gtk_adjustment_get_value (self->adjustment_seconds);
+
+  update_timer_countdown (self,
+                          hours,
+                          minutes,
+                          seconds);
+
+  adw_view_stack_set_visible_child_name (self->timer_face_controls_stack, "done");
 }
 
 static gboolean
 timer_callback (LearningWindow  *self)
 {
+
+  if (g_strcmp0 (adw_view_stack_get_visible_child_name (self->timer_face_controls_stack), "paused") == 0)
+    return G_SOURCE_CONTINUE;
+
   gint64 hours   = g_ascii_strtoll (gtk_label_get_text (self->countdown_hours_label),   NULL, 10);
   gint64 minutes = g_ascii_strtoll (gtk_label_get_text (self->countdown_minutes_label), NULL, 10);
   gint64 seconds = g_ascii_strtoll (gtk_label_get_text (self->countdown_seconds_label), NULL, 10);
@@ -79,10 +103,47 @@ timer_callback (LearningWindow  *self)
 }
 
 static void
+reset_timer (GtkButton      *button,
+             LearningWindow *self)
+{
+  int hours   = gtk_adjustment_get_value (self->adjustment_hours);
+  int minutes = gtk_adjustment_get_value (self->adjustment_minutes);
+  int seconds = gtk_adjustment_get_value (self->adjustment_seconds);
+
+  update_timer_countdown (self,
+                          hours,
+                          minutes,
+                          seconds);
+}
+
+static void
+pause_timer (GtkButton      *button,
+             LearningWindow *self)
+{
+  adw_view_stack_set_visible_child_name (self->timer_face_controls_stack, "paused");
+}
+
+static void
+destroy_timer (GtkButton      *button,
+               LearningWindow *self)
+{
+  reset_adjustments_values (self);
+  adw_view_stack_set_visible_child_name (self->stack, "setup");
+}
+
+static void
+resume_timer (GtkButton      *button,
+              LearningWindow *self)
+{
+  adw_view_stack_set_visible_child_name (self->timer_face_controls_stack, "running");
+}
+
+static void
 start_timer (GtkButton       *button,
              LearningWindow  *self)
 {
   adw_view_stack_set_visible_child_name (self->stack, "face");
+  adw_view_stack_set_visible_child_name (self->timer_face_controls_stack, "running");
 
   int hours   = gtk_adjustment_get_value (self->adjustment_hours);
   int minutes = gtk_adjustment_get_value (self->adjustment_minutes);
@@ -110,8 +171,13 @@ learning_window_class_init (LearningWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_hours_label);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_minutes_label);
   gtk_widget_class_bind_template_child (widget_class, LearningWindow, countdown_seconds_label);
+  gtk_widget_class_bind_template_child (widget_class, LearningWindow, timer_face_controls_stack);
 
   gtk_widget_class_bind_template_callback (widget_class, start_timer);
+  gtk_widget_class_bind_template_callback (widget_class, resume_timer);
+  gtk_widget_class_bind_template_callback (widget_class, destroy_timer);
+  gtk_widget_class_bind_template_callback (widget_class, pause_timer);
+  gtk_widget_class_bind_template_callback (widget_class, reset_timer);
 }
 
 static void
